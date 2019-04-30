@@ -3,20 +3,22 @@ import PropTypes from 'prop-types';
 import TicketList from './TicketList';
 import TicketDetail from './TicketDetail';
 
-function Admin(props){
+function Admin(props) {
+  console.log(props.ticketList);
   let optionalSelectedTicketContent = null;
   if (props.selectedTicket != null) {
-    optionalSelectedTicketContent = <TicketDetail selectedTicket={props.ticketList[props.selectedTicket]} />;
+    optionalSelectedTicketContent = (
+      <TicketDetail selectedTicket={props.ticketList[props.selectedTicket]} />
+    );
   }
   return (
     <div>
       <h2>Admin</h2>
-console.log({props.ticketList});
       {optionalSelectedTicketContent}
       <TicketList
-        ticketList={props.ticketList} 
+        ticketList={props.ticketList}
         currentRouterPath={props.currentRouterPath}
-        onTicketSelection={props.onTicketSelection} />
+        onTicketSelection={props.onTicketSelection}/>
     </div>
   );
 }
