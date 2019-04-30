@@ -11,6 +11,7 @@ function Admin(props){
   return (
     <div>
       <h2>Admin</h2>
+console.log({props.ticketList});
       {optionalSelectedTicketContent}
       <TicketList
         ticketList={props.ticketList} 
