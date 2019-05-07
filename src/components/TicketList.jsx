@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Ticket from "./Ticket";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Ticket from './Ticket';
 
 function TicketList(props) {
   return (
