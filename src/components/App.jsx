@@ -8,18 +8,25 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import Error404 from './Error404';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import c from './../constants';
+import constants from './../constants';
+const { c } = constants;
+import * as actions from './../actions';
 
 class App extends React.Component {
-
   componentDidMount() {
-    this.waitTimeUpdateTimer = setInterval(() =>
-      this.updateTicketElapsedWaitTime(),
-    60000
+    this.waitTimeUpdateTimer = setInterval(
+      () => this.updateTicketElapsedWaitTime(),
+      60000
     );
   }
-  
-  componentWillUnmount(){
+
+  componentWillMount() {
+    const { dispatch } = this.props;
+    const { watchFirebaseTicketsRef } = actions;
+    dispatch(watchFirebaseTicketsRef());
+  }
+
+  componentWillUnmount() {
     clearInterval(this.waitTimeUpdateTimer);
   }
 
@@ -27,7 +34,9 @@ class App extends React.Component {
     const { dispatch } = this.props;
     Object.keys(this.props.masterTicketList).map(ticketId => {
       const ticket = this.props.masterTicketList[ticketId];
-      const newFormattedWaitTime = ticket.timeOpen.fromNow(true);
+      const newFormattedWaitTime = new Moment(ticket.timeOpen).from(
+        new Moment()
+      );
       const action = {
         type: c.UPDATE_TIME,
         id: ticketId,
@@ -37,14 +46,25 @@ class App extends React.Component {
     });
   }
 
-    render() {
+  render() {
     return (
       <div>
-        <Header/>
+        <Header />
         <Switch>
-          <Route exact path='/' render={()=><TicketList ticketList={this.props.masterTicketList} />} />
-          <Route path='/newticket' render={()=><NewTicketControl />} />
-          <Route path='/admin' render={(props)=><Admin currentRouterPath={props.location.pathname} />} />
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <TicketList ticketList={this.props.masterTicketList} />
+            )}
+          />
+          <Route path="/newticket" render={() => <NewTicketControl />} />
+          <Route
+            path="/admin"
+            render={props => (
+              <Admin currentRouterPath={props.location.pathname} />
+            )}
+          />
           <Route component={Error404} />
         </Switch>
       </div>

@@ -1,10 +1,18 @@
-import c from './../constants';
+import constants from './../../src/constants';
+const { c } = constants;
 
 export default (state = {}, action) => {
   let newState;
   switch (action.type) {
   case c.ADD_TICKET:
-    const { names, location, issue, timeOpen, id } = action;
+    const {
+      names,
+      location,
+      issue,
+      timeOpen,
+      id,
+      formattedWaitTime
+    } = action;
     newState = Object.assign({}, state, {
       [id]: {
         names: names,
@@ -17,15 +25,19 @@ export default (state = {}, action) => {
     });
     return newState;
 
-    case c.UPDATE_TIME:
-    const newTicket = Object.assign({}, state[id], {formattedWaitTime});
+  case c.UPDATE_TIME:
+    const newTicket = Object.assign({}, state[id], { formattedWaitTime });
     newState = Object.assign({}, state, {
       [id]: newTicket
     });
     return newState;
 
-    default:
-      return state;
+  case c.RECEIVE_TICKET:
+    newState = Object.assign({}, state);
+    newState[action.ticket.id] = action.ticket;
+    return newState;
+
+  default:
+    return state;
   }
 };
-  
